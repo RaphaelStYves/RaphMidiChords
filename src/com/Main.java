@@ -2,10 +2,12 @@ package com;
 
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -48,13 +50,13 @@ public class Main extends Application {
 
         Scene scene = new Scene(createContents(primaryStage));
 
-        scene.setOnKeyPressed(event -> clicked = true);
-        scene.setOnKeyPressed(event -> clicked = false);
+        scene.addEventFilter(MouseEvent.DRAG_DETECTED, event -> scene.startFullDrag());
+
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("10 000 objects");
-        primaryStage.setWidth(1000);
-        primaryStage.setHeight(830);
+        primaryStage.setWidth(1600);
+        primaryStage.setHeight(900);
         primaryStage.show();
 
 
@@ -221,8 +223,16 @@ public class Main extends Application {
             choice2 = 13;
         });
 
+        Button btnv99 = new Button("00");
+        btnv99.setPrefSize(BTNWIDTH,BTNHEIGHT);
+        btnv99.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
+        btnv99.setOnMouseClicked(event -> {
+            choice = Color.BEIGE;
+            choice2 = 99;
+        });
 
-        vbox.getChildren().addAll(btnSave,btnI,btni,btnII, btnii, btnIII, btniii, btnIV, btniv, btnV, btnv, btnVI, btnvi, btnVII, btnvii);
+
+        vbox.getChildren().addAll(btnSave,btnI,btni,btnII, btnii, btnIII, btniii, btnIV, btniv, btnV, btnv, btnVI, btnvi, btnVII, btnvii,btnv99);
         masterPane.setLeft(vbox);
 
 
@@ -245,20 +255,19 @@ public class Main extends Application {
                         ViewChord viewChord = new ViewChord(i * ViewNote.NOTEWIDTH);
 
 
-                        viewChord.setOnMouseMoved((event1 -> {
+                        viewChord.setOnMouseDragEntered((event1 -> {
 
-                            if (clicked == true){
                                 viewChord.setFill(choice);
                                 piece.chords.get((int) (viewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(choice2);
-                            }
+
                           }));
 
                         ViewNewChord viewNewChord = new ViewNewChord(i * ViewNote.NOTEWIDTH);
-                        viewNewChord.setOnMouseMoved((event1 -> {
-                            if (clicked == false){
+                        viewNewChord.setOnMouseDragEntered((event1 -> {
+
                                 viewNewChord.setFill(choice);
                                 piece.chords.get((int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(choice2);
-                            }
+
                         }));
 
 
@@ -289,6 +298,8 @@ public class Main extends Application {
        ScrollPane scrollPane = new ScrollPane(borderPane);
 
         masterPane.setCenter(scrollPane);
+
+
 
         return masterPane;
     }

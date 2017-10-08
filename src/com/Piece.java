@@ -15,6 +15,7 @@ public class Piece implements Serializable{
     private long pieceLenght;
     private float bpm = 0;
     List<Note> notes = new ArrayList<>();
+    List<Chord> chords = new ArrayList<>();
 
 
     private static final int NOTE_ON = 0x90;
@@ -88,6 +89,7 @@ public class Piece implements Serializable{
         findPieceLenght();
         calculateLenght();
         ChangeToFalse();
+        initChords();
 
     }
 
@@ -169,6 +171,20 @@ public class Piece implements Serializable{
         pieceLenght = temp;
     }
 
+    private void initChords() {
+
+        for (int i = 0; i < getPieceLenght16(); i++) {
+
+            Chord chord = new Chord();
+            chord.setChord(99);
+
+            chords.add(chord);
+
+
+        }
+
+    }
+
     public int getResolution() {
         return resolution;
     }
@@ -187,8 +203,11 @@ public class Piece implements Serializable{
 
     class Chord implements Serializable{
 
-        private int index;
+        private int chord;
 
+        public void setChord(int chord) {
+            this.chord = chord;
+        }
     }
 
 

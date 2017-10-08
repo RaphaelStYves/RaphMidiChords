@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 
 public class  ViewNote extends Group{
 
-    public static final int NOTEWIDTH = 30;
+    public static final int NOTEWIDTH = 15;
     public static final int NOTEHEIGHT = 20;
     public static final int SCOREWIDTH = 30;
     public static final int BEATHEIGHT = 30;
