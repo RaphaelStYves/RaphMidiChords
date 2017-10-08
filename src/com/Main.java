@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -30,7 +31,10 @@ public class Main extends Application {
     private Pane root;
     private Rectangle rect2;
 
+    private  boolean clicked = false;
+
     private Color choice =Color. BLUE;
+    private int choice2 = 99;
 
 
 
@@ -41,9 +45,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         Scene scene = new Scene(createContents(primaryStage));
 
-
+        scene.setOnKeyPressed(event -> clicked = true);
+        scene.setOnKeyPressed(event -> clicked = false);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("10 000 objects");
@@ -53,7 +59,7 @@ public class Main extends Application {
 
 
         scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.SPACE) {
+            if (e.getCode() == KeyCode.NUMPAD1) {
                 SoundMidi soundMidi = new SoundMidi(piece, rect2);
                 try {
                     soundMidi.play();
@@ -71,7 +77,9 @@ public class Main extends Application {
 
     private Parent createContents(Stage primaryStage) {
 
+        BorderPane masterPane = new BorderPane();
         BorderPane borderPane = new BorderPane();
+
 
         MenuBar menuBar = new MenuBar();
         menuBar.setPrefWidth(1000);
@@ -79,7 +87,7 @@ public class Main extends Application {
         menuBar.getMenus().add(menuFile);
         MenuItem importFile = new MenuItem("Import");
         menuFile.getItems().add(importFile);
-        borderPane.setTop(menuBar);
+        masterPane.setTop(menuBar);
 
 
         VBox vbox = new VBox();
@@ -102,76 +110,120 @@ public class Main extends Application {
         Button btnI = new Button("I");
         btnI.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnI.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnI.setOnMouseClicked(event ->  choice = Color.DODGERBLUE);
+        btnI.setOnMouseClicked(event ->  {
+            choice = Color.DODGERBLUE;
+            choice2 = 0;
+        });
 
         Button btni = new Button("i");
         btni.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btni.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btni.setOnMouseClicked(event ->  choice = Color.CORNFLOWERBLUE);
+        btni.setOnMouseClicked(event ->{
+            choice = Color.CORNFLOWERBLUE;
+            choice2 = 1;
+        });
 
         Button btnII = new Button("II");
         btnII.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnII.setOnMouseClicked(event ->  choice = Color.CORAL);
+        btnII.setOnMouseClicked(event -> {
+            choice = Color.CORAL;
+            choice2 = 2;
+        });
+
 
         Button btnii = new Button("ii");
         btnii.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnii.setOnMouseClicked(event ->  choice = Color.DARKSALMON);
+        btnii.setOnMouseClicked(event -> {
+            choice = Color.DARKSALMON;
+            choice2 = 3;
+        });
 
         Button btnIII = new Button("III");
         btnIII.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnIII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnIII.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btnIII.setOnMouseClicked(event -> {
+                choice = Color.HOTPINK;
+                choice2 = 4;
+    });
 
         Button btniii = new Button("iii");
         btniii.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btniii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btniii.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btniii.setOnMouseClicked(event -> {
+                choice = Color.VIOLET;
+                choice2 = 5;
+    });
 
         Button btnIV = new Button("IV");
         btnIV.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnIV.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnIV.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btnIV.setOnMouseClicked(event -> {
+            choice = Color.YELLOWGREEN;
+            choice2 = 6;
+        });
 
         Button btniv = new Button("iv");
         btniv.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btniv.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btniv.setOnMouseClicked(event ->  choice =Color.HOTPINK);
+        btniv.setOnMouseClicked(event ->  {
+            choice =Color.PALEGREEN;
+            choice2 = 7;
+        });
 
         Button btnV = new Button("V");
         btnV.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnV.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnV.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btnV.setOnMouseClicked(event -> {
+            choice = Color.FIREBRICK;
+            choice2 = 8;
+        });
 
         Button btnv = new Button("v");
         btnv.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnv.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnv.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btnv.setOnMouseClicked(event -> {
+            choice = Color.PALEVIOLETRED;
+            choice2 = 9;
+
+        });
 
         Button btnVI = new Button("VI");
         btnVI.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnVI.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnVI.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btnVI.setOnMouseClicked(event -> {
+            choice = Color.AQUA;
+            choice2 = 10;
+        });
 
         Button btnvi = new Button("vi");
         btnvi.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnvi.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnvi.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btnvi.setOnMouseClicked(event -> {
+            choice = Color.AQUAMARINE;
+            choice2 = 11;
+        });
 
         Button btnVII = new Button("VII");
         btnVII.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnVII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnVII.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btnVII.setOnMouseClicked(event -> {
+            choice = Color.TAN;
+            choice2 = 12;
+        });
 
         Button btnvii = new Button("vii");
         btnvii.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnvii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnvii.setOnMouseClicked(event ->  choice = Color.HOTPINK);
+        btnvii.setOnMouseClicked(event -> {
+            choice = Color.BEIGE;
+            choice2 = 13;
+        });
 
 
         vbox.getChildren().addAll(btnSave,btnI,btni,btnII, btnii, btnIII, btniii, btnIV, btniv, btnV, btnv, btnVI, btnvi, btnVII, btnvii);
-        borderPane.setLeft(vbox);
+        masterPane.setLeft(vbox);
 
 
 
@@ -190,13 +242,29 @@ public class Main extends Application {
 
                     for (int i = 0; i < piece.getPieceLenght16(); i++) {
 
-                        ViewChord viewChord = new ViewChord(i);
-                        viewChord.setOnMouseClicked((event1 -> viewChord.setFill(choice)));
-                        root.getChildren().add(viewChord);
+                        ViewChord viewChord = new ViewChord(i * ViewNote.NOTEWIDTH);
+
+
+                        viewChord.setOnMouseMoved((event1 -> {
+
+                            if (clicked == true){
+                                viewChord.setFill(choice);
+                                piece.chords.get((int) (viewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(choice2);
+                            }
+                          }));
+
+                        ViewNewChord viewNewChord = new ViewNewChord(i * ViewNote.NOTEWIDTH);
+                        viewNewChord.setOnMouseMoved((event1 -> {
+                            if (clicked == false){
+                                viewNewChord.setFill(choice);
+                                piece.chords.get((int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(choice2);
+                            }
+                        }));
+
+
+                        root.getChildren().addAll(viewChord,viewNewChord);
 
                     }
-
-
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -218,14 +286,11 @@ public class Main extends Application {
         rect2.setFill(Color.RED);
         root.getChildren().add(rect2);
 
-
-
-
-
-
        ScrollPane scrollPane = new ScrollPane(borderPane);
 
-        return scrollPane;
+        masterPane.setCenter(scrollPane);
+
+        return masterPane;
     }
 
 
