@@ -1,8 +1,7 @@
-package com;
+package com.Common;
 
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -21,22 +19,22 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import static com.ViewBackGround.NBNOTE;
+
+import static com.Common.ViewBackGround.NBNOTE;
 
 public class Main extends Application {
 
-    private List<Rectangle> rects = new ArrayList<>();
+
     private Piece piece;
+    private Piece newPiece;
+
     private Pane root;
     private Rectangle rect2;
 
-    private  boolean clicked = false;
 
     private Color choice =Color. BLUE;
-    private int choice2 = 99;
+    private EChord choice2 = EChord.nothing;
 
 
 
@@ -101,7 +99,7 @@ public class Main extends Application {
 
         btnSave.setOnMouseClicked(event -> {
             try {
-                SavecObject.writeToFile(piece);
+                SaveObject.writeToFile(piece);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -114,7 +112,7 @@ public class Main extends Application {
         btnI.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnI.setOnMouseClicked(event ->  {
             choice = Color.DODGERBLUE;
-            choice2 = 0;
+            choice2 = EChord.I;
         });
 
         Button btni = new Button("i");
@@ -122,7 +120,7 @@ public class Main extends Application {
         btni.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btni.setOnMouseClicked(event ->{
             choice = Color.CORNFLOWERBLUE;
-            choice2 = 1;
+            choice2 = EChord.i;
         });
 
         Button btnII = new Button("II");
@@ -130,7 +128,7 @@ public class Main extends Application {
         btnII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnII.setOnMouseClicked(event -> {
             choice = Color.CORAL;
-            choice2 = 2;
+            choice2 = EChord.II;
         });
 
 
@@ -139,7 +137,7 @@ public class Main extends Application {
         btnii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnii.setOnMouseClicked(event -> {
             choice = Color.DARKSALMON;
-            choice2 = 3;
+            choice2 = EChord.ii;
         });
 
         Button btnIII = new Button("III");
@@ -147,7 +145,7 @@ public class Main extends Application {
         btnIII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnIII.setOnMouseClicked(event -> {
                 choice = Color.HOTPINK;
-                choice2 = 4;
+                choice2 = EChord.III;
     });
 
         Button btniii = new Button("iii");
@@ -155,7 +153,7 @@ public class Main extends Application {
         btniii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btniii.setOnMouseClicked(event -> {
                 choice = Color.VIOLET;
-                choice2 = 5;
+                choice2 = EChord.iii;
     });
 
         Button btnIV = new Button("IV");
@@ -163,7 +161,7 @@ public class Main extends Application {
         btnIV.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnIV.setOnMouseClicked(event -> {
             choice = Color.YELLOWGREEN;
-            choice2 = 6;
+            choice2 = EChord.IV;
         });
 
         Button btniv = new Button("iv");
@@ -171,7 +169,7 @@ public class Main extends Application {
         btniv.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btniv.setOnMouseClicked(event ->  {
             choice =Color.PALEGREEN;
-            choice2 = 7;
+            choice2 = EChord.iv;
         });
 
         Button btnV = new Button("V");
@@ -179,7 +177,7 @@ public class Main extends Application {
         btnV.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnV.setOnMouseClicked(event -> {
             choice = Color.FIREBRICK;
-            choice2 = 8;
+            choice2 = EChord.V;
         });
 
         Button btnv = new Button("v");
@@ -187,7 +185,7 @@ public class Main extends Application {
         btnv.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnv.setOnMouseClicked(event -> {
             choice = Color.PALEVIOLETRED;
-            choice2 = 9;
+            choice2 = EChord.v;
 
         });
 
@@ -196,7 +194,7 @@ public class Main extends Application {
         btnVI.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnVI.setOnMouseClicked(event -> {
             choice = Color.AQUA;
-            choice2 = 10;
+            choice2 = EChord.VI;
         });
 
         Button btnvi = new Button("vi");
@@ -204,7 +202,7 @@ public class Main extends Application {
         btnvi.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnvi.setOnMouseClicked(event -> {
             choice = Color.AQUAMARINE;
-            choice2 = 11;
+            choice2 = EChord.vi;
         });
 
         Button btnVII = new Button("VII");
@@ -212,7 +210,7 @@ public class Main extends Application {
         btnVII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnVII.setOnMouseClicked(event -> {
             choice = Color.TAN;
-            choice2 = 12;
+            choice2 = EChord.VII;
         });
 
         Button btnvii = new Button("vii");
@@ -220,15 +218,15 @@ public class Main extends Application {
         btnvii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnvii.setOnMouseClicked(event -> {
             choice = Color.BEIGE;
-            choice2 = 13;
+            choice2 = EChord.vii;
         });
 
         Button btnv99 = new Button("00");
         btnv99.setPrefSize(BTNWIDTH,BTNHEIGHT);
         btnv99.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
         btnv99.setOnMouseClicked(event -> {
-            choice = Color.BEIGE;
-            choice2 = 99;
+            choice = Color.GRAY;
+            choice2 = EChord.nothing;
         });
 
 
@@ -245,14 +243,24 @@ public class Main extends Application {
 
                 try {
                     piece = new Piece(midiFile);
+                    newPiece = new Piece(midiFile);
 
+                    //Make de backGround
+                    root.getChildren().addAll(new ViewBackGround(piece));
 
-                    root.getChildren().addAll(new ViewBackGround(piece),new ViewNote(piece));
+                    //Make visual for original piece.
+                    for (int i = 0; i < piece.notes.size(); i++) {
+                        //piece.notes.get(i).getCNote();
+                        if (piece.notes.get(i).getOn()) {
+                            ViewNote viewNote = new ViewNote(piece.notes.get(i).getPulse16(),piece.notes.get(i).getCNote(),piece.notes.get(i).getLenght16(), 1);
+                            root.getChildren().addAll(viewNote);
+                        }
+                    }
 
 
                     for (int i = 0; i < piece.getPieceLenght16(); i++) {
 
-                        ViewChord viewChord = new ViewChord(i * ViewNote.NOTEWIDTH);
+                        ViewChord viewChord = new ViewChord(i * ViewNote.NOTEWIDTH,0);
 
 
                         viewChord.setOnMouseDragEntered((event1 -> {
@@ -262,11 +270,11 @@ public class Main extends Application {
 
                           }));
 
-                        ViewNewChord viewNewChord = new ViewNewChord(i * ViewNote.NOTEWIDTH);
+                        ViewChord viewNewChord = new ViewChord(i * ViewNote.NOTEWIDTH ,1);
                         viewNewChord.setOnMouseDragEntered((event1 -> {
 
                                 viewNewChord.setFill(choice);
-                                piece.chords.get((int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(choice2);
+                                newPiece.chords.get((int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(choice2);
 
                         }));
 
@@ -291,7 +299,7 @@ public class Main extends Application {
         root = new Pane();
         borderPane.setCenter(root);
 
-        rect2 =new Rectangle(0,0,5,ViewNote.BEATHEIGHT + (NBNOTE  * ViewNote.NOTEHEIGHT));
+        rect2 =new Rectangle(0,0,5, ViewNote.BEATHEIGHT + (NBNOTE  * ViewNote.NOTEHEIGHT));
         rect2.setFill(Color.RED);
         root.getChildren().add(rect2);
 

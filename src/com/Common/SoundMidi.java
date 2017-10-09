@@ -1,4 +1,4 @@
-package com;
+package com.Common;
 
 
 import javafx.scene.shape.Rectangle;
@@ -57,11 +57,11 @@ public class SoundMidi  {
 
             if (piece.notes.get(i).getOn() == true) {
                 ShortMessage on = new ShortMessage();
-                on.setMessage(NOTE_ON, piece.notes.get(i).getChannel(), piece.notes.get(i).getNote(), piece.notes.get(i).getVelocity());
+                on.setMessage(NOTE_ON, piece.notes.get(i).getChannel(), piece.notes.get(i).getCNote(), piece.notes.get(i).getVelocity());
                 track.add(new MidiEvent(on, piece.notes.get(i).getPulse16()*(piece.getResolution()/4)));
             }else {
                 ShortMessage off = new ShortMessage();
-                off.setMessage(NOTE_OFF, piece.notes.get(i).getChannel(), piece.notes.get(i).getNote(), 0);
+                off.setMessage(NOTE_OFF, piece.notes.get(i).getChannel(), piece.notes.get(i).getCNote(), 0);
                 track.add(new MidiEvent(off, piece.notes.get(i).getPulse16()*(piece.getResolution()/4)));
             }
 
@@ -88,7 +88,7 @@ public class SoundMidi  {
 
             count++;
             System.out.println(count);
-            main.update(rect2, count* ViewNote.NOTEWIDTH);
+            main.update(rect2, count* Piece.ViewNote.NOTEWIDTH);
 
 
         });

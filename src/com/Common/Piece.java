@@ -1,4 +1,9 @@
-package com;
+package com.Common;
+
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import javax.sound.midi.*;
 import java.io.File;
@@ -14,8 +19,8 @@ public class Piece implements Serializable{
     private int cTranspose;
     private long pieceLenght;
     private float bpm = 0;
-    List<Note> notes = new ArrayList<>();
-    List<Chord> chords = new ArrayList<>();
+    public List<Note> notes = new ArrayList<>();
+    public List<Chord> chords = new ArrayList<>();
 
 
     private static final int NOTE_ON = 0x90;
@@ -176,7 +181,7 @@ public class Piece implements Serializable{
         for (int i = 0; i < getPieceLenght16(); i++) {
 
             Chord chord = new Chord();
-            chord.setChord(99);
+            chord.setChord(EChord.nothing);
 
             chords.add(chord);
 
@@ -203,10 +208,14 @@ public class Piece implements Serializable{
 
     class Chord implements Serializable{
 
-        private int chord;
+        private EChord chord;
 
-        public void setChord(int chord) {
+        public void setChord(EChord chord) {
             this.chord = chord;
+        }
+
+        public EChord getChord() {
+            return chord;
         }
     }
 
@@ -256,7 +265,7 @@ public class Piece implements Serializable{
             return lenght;
         }
 
-        int getNote() {
+        public int getNote() {
             return note;
         }
 
@@ -329,4 +338,6 @@ public class Piece implements Serializable{
             this.index = index;
         }
     }
+
+
 }

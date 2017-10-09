@@ -1,4 +1,4 @@
-package com;
+package com.Common;
 
 
 import javafx.scene.Group;
@@ -13,7 +13,6 @@ public class ViewBackGround extends Group {
 
 
     public static final int NBNOTE =125;
-    public static final int CHORDSPLACE = 25;
     private int TXTAJUTY = 15;
     private int TXTAJUTX = 10;
     //old 78
@@ -24,8 +23,8 @@ public class ViewBackGround extends Group {
 
         for (int i = 0; i <= NBNOTE; i++) {
 
-            Rectangle rect1 = new Rectangle(0 , (NBNOTE - i) * ViewNote.NOTEHEIGHT, ViewNote.NOTEWIDTH * piece.getPieceLenght16(), ViewNote.NOTEHEIGHT);
-            Text text = new Text(TXTAJUTX,(NBNOTE - i) * ViewNote.NOTEHEIGHT + TXTAJUTY, null);
+            Rectangle rect1 = new Rectangle(0 , (NBNOTE - i) * Piece.ViewNote.NOTEHEIGHT, Piece.ViewNote.NOTEWIDTH * piece.getPieceLenght16(), Piece.ViewNote.NOTEHEIGHT);
+            Text text = new Text(TXTAJUTX,(NBNOTE - i) * Piece.ViewNote.NOTEHEIGHT + TXTAJUTY, null);
 
 
             switch (i%12) {
@@ -86,7 +85,7 @@ public class ViewBackGround extends Group {
 
             if (i%1 ==0){
 
-                Rectangle line1 = new Rectangle(i*ViewNote.NOTEWIDTH, 0, 3, (NBNOTE  * ViewNote.NOTEHEIGHT));
+                Rectangle line1 = new Rectangle(i* Piece.ViewNote.NOTEWIDTH, 0, 3, (NBNOTE  * Piece.ViewNote.NOTEHEIGHT));
                 line1.setFill(Color.BLUE);
                 line1.setOpacity(.20);
 
@@ -96,7 +95,7 @@ public class ViewBackGround extends Group {
 
             if (i%16 ==0){
 
-                Rectangle line16 = new Rectangle(i*ViewNote.NOTEWIDTH, 0, 3, (NBNOTE  * ViewNote.NOTEHEIGHT));
+                Rectangle line16 = new Rectangle(i* Piece.ViewNote.NOTEWIDTH, 0, 3, (NBNOTE  * Piece.ViewNote.NOTEHEIGHT));
                 line16.setOpacity(.20);
 
                 getChildren().add(line16);
