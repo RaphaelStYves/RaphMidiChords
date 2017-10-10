@@ -3,9 +3,9 @@ package com.Common;
 
 import java.util.*;
 
-public final class NoteAlgo {
+public final class AlgoNote {
 
-    public  int changenote(EChord chord, EChord newChord, int note) {
+    public static int changenote(EChord origChord, EChord newChord, int note) {
 
         Map<EChord, List<Integer>> mapChord = compliteAllForceChords();
         int newNote = 0;
@@ -13,7 +13,7 @@ public final class NoteAlgo {
 
         for (Map.Entry<EChord, List<Integer>> entry : mapChord.entrySet()) {
 
-            if (chord == entry.getKey()) {
+            if (origChord == entry.getKey()) {
                 degre= entry.getValue().get(note % 12);
             }
         }

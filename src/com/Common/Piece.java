@@ -265,7 +265,7 @@ public class Piece implements Serializable{
             return lenght;
         }
 
-        public int getNote() {
+        private int getNote() {
             return note;
         }
 
@@ -302,7 +302,7 @@ public class Piece implements Serializable{
             this.notename = notename;
         }
 
-        public long getPulse() {
+        private long getPulse() {
             return pulse;
         }
 

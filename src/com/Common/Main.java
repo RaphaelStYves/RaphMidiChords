@@ -2,6 +2,7 @@ package com.Common;
 
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -37,7 +38,10 @@ public class Main extends Application {
     private EChord choice2 = EChord.nothing;
 
 
-
+    private Group newGroup;
+    private ViewNote viewNewNote = null;
+    private Group orgiGroup;
+    private ViewNote viewOrigNote = null;
 
     public static void main(String[] args) {
 	launch(args);
@@ -86,23 +90,40 @@ public class Main extends Application {
         Menu menuFile = new Menu("File");
         menuBar.getMenus().add(menuFile);
         MenuItem importFile = new MenuItem("Import");
-        menuFile.getItems().add(importFile);
+        MenuItem saveFile = new MenuItem("Save");
+        menuFile.getItems().addAll(importFile,saveFile);
         masterPane.setTop(menuBar);
+
+        saveFile.setOnAction(event -> {
+            try {
+                SaveObject.writeToFile(piece);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
 
         VBox vbox = new VBox();
         int BTNWIDTH = 50;
         int BTNHEIGHT = 50;
 
-        Button btnSave = new Button("SAVE");
-        btnSave.setPrefSize(BTNWIDTH,BTNHEIGHT);
+        Button btnUpdate = new Button("Update");
+        btnUpdate.setPrefSize(BTNWIDTH,BTNHEIGHT);
+        btnUpdate.setStyle("-fx-font: 10 arial; -fx-base: #0000ff;");
+        btnUpdate.setOnMouseClicked(event ->  {
+            newGroup.getChildren().clear();
+            newGroup = new Group();
 
-        btnSave.setOnMouseClicked(event -> {
-            try {
-                SaveObject.writeToFile(piece);
-            } catch (IOException e) {
-                e.printStackTrace();
+            for (int i = 0; i < newPiece.notes.size(); i++) {
+
+                newPiece.notes.get(i).getCNote();
+                if (newPiece.notes.get(i).getOn()) {
+                    viewNewNote = new ViewNote(newPiece.notes.get(i).getPulse16(),newPiece.notes.get(i).getCNote(),newPiece.notes.get(i).getLenght16(), 1, Color.GREEN,1);
+                    newGroup.getChildren().add(viewNewNote);
+                }
             }
+            root.getChildren().add(newGroup);
+
         });
 
 
@@ -230,7 +251,7 @@ public class Main extends Application {
         });
 
 
-        vbox.getChildren().addAll(btnSave,btnI,btni,btnII, btnii, btnIII, btniii, btnIV, btniv, btnV, btnv, btnVI, btnvi, btnVII, btnvii,btnv99);
+        vbox.getChildren().addAll(btnUpdate,btnI,btni,btnII, btnii, btnIII, btniii, btnIV, btniv, btnV, btnv, btnVI, btnvi, btnVII, btnvii,btnv99);
         masterPane.setLeft(vbox);
 
 
@@ -245,41 +266,68 @@ public class Main extends Application {
                     piece = new Piece(midiFile);
                     newPiece = new Piece(midiFile);
 
-                    //Make de backGround
+                    //Make the backGround
                     root.getChildren().addAll(new ViewBackGround(piece));
 
                     //Make visual for original piece.
+                    orgiGroup = new Group();
                     for (int i = 0; i < piece.notes.size(); i++) {
-                        //piece.notes.get(i).getCNote();
+                        piece.notes.get(i).getCNote();
                         if (piece.notes.get(i).getOn()) {
-                            ViewNote viewNote = new ViewNote(piece.notes.get(i).getPulse16(),piece.notes.get(i).getCNote(),piece.notes.get(i).getLenght16(), 1);
-                            root.getChildren().addAll(viewNote);
-                        }
+                            viewOrigNote = new ViewNote(piece.notes.get(i).getPulse16(),piece.notes.get(i).getCNote(),piece.notes.get(i).getLenght16(), 5, Color.RED,0.3);
+                            orgiGroup.getChildren().add(viewOrigNote);
+                            }
                     }
+                    root.getChildren().add(orgiGroup);
 
 
+
+                    //Make visual for new piece.
+                    newGroup = new Group();
+                    for (int i = 0; i < newPiece.notes.size(); i++) {
+                        newPiece.notes.get(i).getCNote();
+                        if (newPiece.notes.get(i).getOn()) {
+                            viewNewNote = new ViewNote(newPiece.notes.get(i).getPulse16(),newPiece.notes.get(i).getCNote(),newPiece.notes.get(i).getLenght16(), 1, Color.GREEN, 1);
+                            newGroup.getChildren().add(viewNewNote);
+                            }
+                    }
+                    root.getChildren().add(newGroup);
+
+
+
+
+                    //Make original and new chord piece.
                     for (int i = 0; i < piece.getPieceLenght16(); i++) {
 
-                        ViewChord viewChord = new ViewChord(i * ViewNote.NOTEWIDTH,0);
-
-
-                        viewChord.setOnMouseDragEntered((event1 -> {
-
-                                viewChord.setFill(choice);
-                                piece.chords.get((int) (viewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(choice2);
-
+                        ViewChord viewOldChord = new ViewChord(i * ViewNote.NOTEWIDTH,0);
+                        viewOldChord.setOnMouseDragEntered((event1 -> {
+                            viewOldChord.setFill(choice);
+                                Piece.Chord origChord = piece.chords.get((int) (viewOldChord.getX()/ ViewNote.NOTEWIDTH));
+                                origChord.setChord(choice2);
                           }));
-
                         ViewChord viewNewChord = new ViewChord(i * ViewNote.NOTEWIDTH ,1);
                         viewNewChord.setOnMouseDragEntered((event1 -> {
-
                                 viewNewChord.setFill(choice);
-                                newPiece.chords.get((int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(choice2);
+                                int IndexChord =(int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH);
 
-                        }));
+                                Piece.Chord origChord = piece.chords.get((int) (viewOldChord.getX()/ ViewNote.NOTEWIDTH));
+                                origChord.getChord();
+
+                                //New Chord
+                                Piece.Chord newChord =newPiece.chords.get(IndexChord);
+                                newChord.setChord(choice2);
+
+                                //change data in object data
+                                if((piece.chords.get(IndexChord).getChord() != EChord.nothing)){
+                                newPiece.notes.get(IndexChord).setNote(AlgoNote.changenote(origChord.getChord(),newChord.getChord(),piece.notes.get(IndexChord).getCNote()));
 
 
-                        root.getChildren().addAll(viewChord,viewNewChord);
+
+                            }
+
+
+                          }));
+                        root.getChildren().addAll(viewOldChord,viewNewChord);
 
                     }
 
