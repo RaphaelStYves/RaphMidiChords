@@ -308,27 +308,26 @@ public class Main extends Application {
                         ViewChord viewNewChord = new ViewChord(i * ViewNote.NOTEWIDTH ,1);
                         viewNewChord.setOnMouseDragEntered((event1 -> {
                                 viewNewChord.setFill(choice);
-                                int IndexChord =(int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH);
+                                int pulse16 =(int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH);
 
                                 Piece.Chord origChord = piece.chords.get((int) (viewOldChord.getX()/ ViewNote.NOTEWIDTH));
                                 origChord.getChord();
 
                                 //New Chord
-                                Piece.Chord newChord =newPiece.chords.get(IndexChord);
+                                Piece.Chord newChord =newPiece.chords.get(pulse16);
                                 newChord.setChord(choice2);
 
                                 //change data in object data
-                                if((piece.chords.get(IndexChord).getChord() != EChord.nothing)){
-                                newPiece.notes.get(IndexChord).setNote(AlgoNote.changenote(origChord.getChord(),newChord.getChord(),piece.notes.get(IndexChord).getCNote()));
+                            /////////UPDATE DE TOUT LA TUNE C'EST TROP . JE DOIT ETRE CAPABLE de savoir rapide qu'elle oject j'ai en pulse 10 par exemple.
+                                for (int j = 0; j < piece.getPieceLenght16(); j++) {
 
+                                if((newPiece.notes.get(j).getPulse16() == pulse16 )&&(piece.chords.get(pulse16).getChord() != EChord.nothing)){
+                                    newPiece.notes.get(j).setNote(AlgoNote.changenote(origChord.getChord(),newChord.getChord(),piece.notes.get(pulse16).getCNote()));
 
-
-                            }
-
-
+                                    }
+                               }
                           }));
                         root.getChildren().addAll(viewOldChord,viewNewChord);
-
                     }
 
                 } catch (IOException e) {
