@@ -11,12 +11,15 @@ public final class AlgoNote {
         int newNote = 0;
         int degre = 0;
 
+
         for (Map.Entry<EChord, List<Integer>> entry : mapChord.entrySet()) {
 
             if (origChord == entry.getKey()) {
                 degre= entry.getValue().get(note % 12);
+                break;
             }
         }
+
 
         for (Map.Entry<EChord, List<Integer>> entry : mapChord.entrySet()) {
 
@@ -26,11 +29,18 @@ public final class AlgoNote {
 
                     if (degre == entry.getValue().get(j)) {
 
-                        if (j < 6 ){
-                            newNote = note + j;
-                    }else {
-                            newNote = note + j;
+                        int modNewNote =  j;
+                        int transpose;
+
+                        transpose = modNewNote - (note % 12);
+
+                        if (transpose < 6){
+                            newNote = note + transpose;
+                        }else {
+                            newNote = note - (12- transpose);
                         }
+
+
                     }
                 }
             }

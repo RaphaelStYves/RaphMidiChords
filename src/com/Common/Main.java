@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -20,9 +21,11 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 import static com.Common.ViewBackGround.NBNOTE;
+import static java.awt.SystemColor.text;
 
 public class Main extends Application {
 
@@ -33,10 +36,7 @@ public class Main extends Application {
     private Pane root;
     private Rectangle rect2;
 
-
-    private Color choice =Color. BLUE;
-    private EChord choice2 = EChord.nothing;
-
+    ViewButton btnChord;
 
     private Group newGroup;
     private ViewNote viewNewNote = null;
@@ -64,7 +64,7 @@ public class Main extends Application {
 
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.NUMPAD1) {
-                SoundMidi soundMidi = new SoundMidi(piece, rect2);
+                SoundMidi soundMidi = new SoundMidi(newPiece, rect2);
                 try {
                     soundMidi.play();
                 } catch (MidiUnavailableException e1) {
@@ -108,8 +108,8 @@ public class Main extends Application {
         int BTNHEIGHT = 50;
 
         Button btnUpdate = new Button("Update");
-        btnUpdate.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnUpdate.setStyle("-fx-font: 10 arial; -fx-base: #0000ff;");
+        btnUpdate.setPrefSize(BTNWIDTH,BTNHEIGHT-15);
+        btnUpdate.setStyle("-fx-font: 10 arial; -fx-base: #ff8c00;");
         btnUpdate.setOnMouseClicked(event ->  {
             newGroup.getChildren().clear();
             newGroup = new Group();
@@ -126,132 +126,10 @@ public class Main extends Application {
 
         });
 
+        btnChord = new ViewButton();
 
+       vbox.getChildren().addAll(btnUpdate,new ViewButton());
 
-        Button btnI = new Button("I");
-        btnI.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnI.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnI.setOnMouseClicked(event ->  {
-            choice = Color.DODGERBLUE;
-            choice2 = EChord.I;
-        });
-
-        Button btni = new Button("i");
-        btni.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btni.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btni.setOnMouseClicked(event ->{
-            choice = Color.CORNFLOWERBLUE;
-            choice2 = EChord.i;
-        });
-
-        Button btnII = new Button("II");
-        btnII.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnII.setOnMouseClicked(event -> {
-            choice = Color.CORAL;
-            choice2 = EChord.II;
-        });
-
-
-        Button btnii = new Button("ii");
-        btnii.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnii.setOnMouseClicked(event -> {
-            choice = Color.DARKSALMON;
-            choice2 = EChord.ii;
-        });
-
-        Button btnIII = new Button("III");
-        btnIII.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnIII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnIII.setOnMouseClicked(event -> {
-                choice = Color.HOTPINK;
-                choice2 = EChord.III;
-    });
-
-        Button btniii = new Button("iii");
-        btniii.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btniii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btniii.setOnMouseClicked(event -> {
-                choice = Color.VIOLET;
-                choice2 = EChord.iii;
-    });
-
-        Button btnIV = new Button("IV");
-        btnIV.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnIV.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnIV.setOnMouseClicked(event -> {
-            choice = Color.YELLOWGREEN;
-            choice2 = EChord.IV;
-        });
-
-        Button btniv = new Button("iv");
-        btniv.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btniv.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btniv.setOnMouseClicked(event ->  {
-            choice =Color.PALEGREEN;
-            choice2 = EChord.iv;
-        });
-
-        Button btnV = new Button("V");
-        btnV.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnV.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnV.setOnMouseClicked(event -> {
-            choice = Color.FIREBRICK;
-            choice2 = EChord.V;
-        });
-
-        Button btnv = new Button("v");
-        btnv.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnv.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnv.setOnMouseClicked(event -> {
-            choice = Color.PALEVIOLETRED;
-            choice2 = EChord.v;
-
-        });
-
-        Button btnVI = new Button("VI");
-        btnVI.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnVI.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnVI.setOnMouseClicked(event -> {
-            choice = Color.AQUA;
-            choice2 = EChord.VI;
-        });
-
-        Button btnvi = new Button("vi");
-        btnvi.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnvi.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnvi.setOnMouseClicked(event -> {
-            choice = Color.AQUAMARINE;
-            choice2 = EChord.vi;
-        });
-
-        Button btnVII = new Button("VII");
-        btnVII.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnVII.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnVII.setOnMouseClicked(event -> {
-            choice = Color.TAN;
-            choice2 = EChord.VII;
-        });
-
-        Button btnvii = new Button("vii");
-        btnvii.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnvii.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnvii.setOnMouseClicked(event -> {
-            choice = Color.BEIGE;
-            choice2 = EChord.vii;
-        });
-
-        Button btnv99 = new Button("00");
-        btnv99.setPrefSize(BTNWIDTH,BTNHEIGHT);
-        btnv99.setStyle("-fx-font: 15 arial; -fx-base: #0000ff;");
-        btnv99.setOnMouseClicked(event -> {
-            choice = Color.GRAY;
-            choice2 = EChord.nothing;
-        });
-
-
-        vbox.getChildren().addAll(btnUpdate,btnI,btni,btnII, btnii, btnIII, btniii, btnIV, btniv, btnV, btnv, btnVI, btnvi, btnVII, btnvii,btnv99);
         masterPane.setLeft(vbox);
 
 
@@ -288,44 +166,43 @@ public class Main extends Application {
                         newPiece.notes.get(i).getCNote();
                         if (newPiece.notes.get(i).getOn()) {
                             viewNewNote = new ViewNote(newPiece.notes.get(i).getPulse16(),newPiece.notes.get(i).getCNote(),newPiece.notes.get(i).getLenght16(), 1, Color.GREEN, 1);
-                            newGroup.getChildren().add(viewNewNote);
+                            newGroup.getChildren().addAll(viewNewNote);
                             }
                     }
                     root.getChildren().add(newGroup);
 
 
 
-
-                    //Make original and new chord piece.
                     for (int i = 0; i < piece.getPieceLenght16(); i++) {
 
-                        ViewChord viewOldChord = new ViewChord(i * ViewNote.NOTEWIDTH,0);
-                        viewOldChord.setOnMouseDragEntered((event1 -> {
-                            viewOldChord.setFill(choice);
-                                Piece.Chord origChord = piece.chords.get((int) (viewOldChord.getX()/ ViewNote.NOTEWIDTH));
-                                origChord.setChord(choice2);
-                          }));
-                        ViewChord viewNewChord = new ViewChord(i * ViewNote.NOTEWIDTH ,1);
+                        //Make visual for CHORD DATA
+                        ViewChord viewOldChord = new ViewChord(i * ViewNote.NOTEWIDTH,0,btnChord.getChord(),btnChord.getColor(),piece.chords);
+
+
+                        //Make visual for CHORD DATA
+                        //////////////////////ici piece.chords devrait être soit la nouvelle tune ou la vieille pas seulement la  nouvelle....
+                        ViewChord viewNewChord = new ViewChord(i * ViewNote.NOTEWIDTH,1,btnChord.getChord(),btnChord.getColor(),newPiece.chords);
+
                         viewNewChord.setOnMouseDragEntered((event1 -> {
-                                viewNewChord.setFill(choice);
+
+
                                 int pulse16 =(int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH);
 
-                                Piece.Chord origChord = piece.chords.get((int) (viewOldChord.getX()/ ViewNote.NOTEWIDTH));
+                                Piece.Chord origChord = piece.chords.get(pulse16);
                                 origChord.getChord();
 
                                 //New Chord
                                 Piece.Chord newChord =newPiece.chords.get(pulse16);
-                                newChord.setChord(choice2);
+                                newChord.setChord(btnChord.getChord());
 
-                                //change data in object data
-                            /////////UPDATE DE TOUT LA TUNE C'EST TROP . JE DOIT ETRE CAPABLE de savoir rapide qu'elle oject j'ai en pulse 10 par exemple.
-                                for (int j = 0; j < piece.getPieceLenght16(); j++) {
+                            if(piece.chords.get(pulse16).getChord() != EChord.nothing && piece.pulses.containsKey(pulse16)){
 
-                                if((newPiece.notes.get(j).getPulse16() == pulse16 )&&(piece.chords.get(pulse16).getChord() != EChord.nothing)){
-                                    newPiece.notes.get(j).setNote(AlgoNote.changenote(origChord.getChord(),newChord.getChord(),piece.notes.get(pulse16).getCNote()));
+                                for (Piece.Note note : newPiece.pulses.get(pulse16).getNotes()) {
+                                    note.setNote(AlgoNote.changenote(origChord.getChord(),newChord.getChord(),note.getCNote()));
+                                }
 
-                                    }
-                               }
+                            }
+
                           }));
                         root.getChildren().addAll(viewOldChord,viewNewChord);
                     }

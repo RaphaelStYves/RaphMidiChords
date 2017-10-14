@@ -21,6 +21,7 @@ public class Piece implements Serializable{
     private float bpm = 0;
     public List<Note> notes = new ArrayList<>();
     public List<Chord> chords = new ArrayList<>();
+    public HashMap<Integer,Pulse> pulses = new HashMap<>();
 
 
     private static final int NOTE_ON = 0x90;
@@ -51,9 +52,6 @@ public class Piece implements Serializable{
 
                 MidiEvent event = track.get(i);
 
-
-                note.setPulse(event.getTick());
-
                 MidiMessage message = event.getMessage();
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
@@ -66,6 +64,7 @@ public class Piece implements Serializable{
                         note.setOn(true);
                         note.setNote(sm.getData1());
                         note.setVelocity(sm.getData2());
+                        note.setPulse(event.getTick());
                         note.setOctave((sm.getData1() / 12) - 1);
 
                         note.setNotename(NOTE_NAMES[sm.getData1() % 12]);
@@ -73,16 +72,33 @@ public class Piece implements Serializable{
                         notes.add(note);
 
 
+                        if ( !pulses.containsKey(note.getPulse16())){
+
+                            Pulse pulse = new Pulse();
+                            pulse.addNote(note);
+                            pulses.put(note.getPulse16(), pulse);
+
+                        }else {
+
+                            Pulse pulse = pulses.get(note.getPulse16());
+                            pulse.addNote(note);
+                            //pulses.put(note.getPulse16(), pulse);
+                        }
+
+
+
                     } else if (sm.getCommand() == NOTE_OFF) {
 
                         note.setIndex(i);
                         note.setOn(false);
                         note.setNote(sm.getData1());
+                        note.setPulse(event.getTick());
                         note.setVelocity(sm.getData2());
 
                         note.setNotename(NOTE_NAMES[sm.getData1() % 12]);
 
                         notes.add(note);
+
 
                     }
                 }
@@ -252,8 +268,6 @@ public class Piece implements Serializable{
 
             return (int)((pulse/((double)resolution/4))+.5);
 
-
-
         }
 
         public int getCNote() {
@@ -337,6 +351,7 @@ public class Piece implements Serializable{
         public void setIndex(int index) {
             this.index = index;
         }
+
     }
 
 

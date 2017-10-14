@@ -88,7 +88,7 @@ public class SoundMidi  {
 
             count++;
             System.out.println(count);
-            main.update(rect2, count* Piece.ViewNote.NOTEWIDTH);
+            main.update(rect2, count* ViewNote.NOTEWIDTH);
 
 
         });
