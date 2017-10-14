@@ -5,22 +5,22 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
-public class ViewChord  extends Rectangle {
+public class ViewChord  extends Rectangle  {
 
 
-
-    public ViewChord(int i, int Yplace, EChord chord, Color color, List<Piece.Chord> chords) {
+    public ViewChord(int i, int Yplace, List<Piece.Chord> chords) {
 
         super(i , Yplace*ViewNote.NOTEWIDTH, ViewNote.NOTEWIDTH, ViewNote.NOTEHEIGHT);
         setStroke(Color.BLACK);
         setFill(Color.GRAY);
 
 
-        this.setOnMouseDragEntered((event1 -> {
-            this.setFill(color);
-            chords.get((int) (this.getX()/ ViewNote.NOTEWIDTH)).setChord(chord);
-        }));
+//        this.setOnMouseDragEntered((event1 -> {
+//            this.setFill(new ViewButton().getColor());
+//            chords.get((int) (this.getX()/ ViewNote.NOTEWIDTH)).setChord(new ViewButton().getChord());
+//        }));
 
     }
+
 
 }

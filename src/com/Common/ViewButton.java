@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 
 public class ViewButton extends VBox {
 
-    private Color color =Color. BLUE;
+    private Color color =Color.BLUE;
     private EChord chord = EChord.nothing;
     int BTNWIDTH = 50;
     int BTNHEIGHT = 50;
@@ -18,9 +18,6 @@ public class ViewButton extends VBox {
     int FAC = 15;
 
     ViewButton(){
-
-
-
 
 
         Button btnI = new Button("I");
@@ -154,7 +151,7 @@ public class ViewButton extends VBox {
 
 
     public Color getColor() {
-        return color;
+        return this.color;
     }
 
     public void setColor(Color choice) {
