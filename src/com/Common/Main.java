@@ -1,6 +1,9 @@
 package com.Common;
 
 
+import com.analysePiece.chordFinder.ChordFinder;
+
+import com.analysePiece.voiceFinder.VoiceFinder;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -13,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -21,11 +25,12 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+
 
 
 import static com.Common.ViewBackGround.NBNOTE;
-import static java.awt.SystemColor.text;
+import static com.Common.ViewNote.NOTEHEIGHT;
+import static com.Common.ViewNote.NOTEWIDTH;
 
 public class Main extends Application {
 
@@ -50,6 +55,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+
 
         Scene scene = new Scene(createContents(primaryStage));
 
@@ -97,7 +104,7 @@ public class Main extends Application {
 
         saveFile.setOnAction(event -> {
             try {
-                SaveObject.writeToFile(piece);
+                SavePiece.writeToFile(piece, newPiece);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -120,6 +127,7 @@ public class Main extends Application {
                 newPiece.notes.get(i).getCNote();
                 if (newPiece.notes.get(i).getOn()) {
                     viewNewNote = new ViewNote(newPiece.notes.get(i).getPulse16(),newPiece.notes.get(i).getCNote(),newPiece.notes.get(i).getLenght16(), 1, Color.GREEN,1);
+
                     newGroup.getChildren().add(viewNewNote);
                 }
             }
@@ -259,6 +267,9 @@ public class Main extends Application {
         masterPane.setLeft(vbox);
 
 
+        AlgoNote algoNote = new AlgoNote();
+
+
 
         final FileChooser fileChooser = new FileChooser();
         importFile.setOnAction(event -> {
@@ -270,8 +281,13 @@ public class Main extends Application {
                     piece = new Piece(midiFile);
                     newPiece = new Piece(midiFile);
 
+                    //chords finder
+
+                    ChordFinder chordFinder = new ChordFinder(piece);
+                    chordFinder.findChord();
+
                     //Make the backGround
-                    root.getChildren().addAll(new ViewBackGround(piece));
+                    root.getChildren().addAll(new ViewBackGround((int)piece.getPieceLenght16()));
 
                     //Make visual for original piece.
                     orgiGroup = new Group();
@@ -292,32 +308,59 @@ public class Main extends Application {
                         newPiece.notes.get(i).getCNote();
                         if (newPiece.notes.get(i).getOn()) {
                             viewNewNote = new ViewNote(newPiece.notes.get(i).getPulse16(),newPiece.notes.get(i).getCNote(),newPiece.notes.get(i).getLenght16(), 1, Color.GREEN, 1);
-                            newGroup.getChildren().addAll(viewNewNote);
+
+                            Text text = new Text();
+                            text.setText(Integer.toString(newPiece.notes.get(i).getCNote()));
+                            text.setX(newPiece.notes.get(i).getPulse16()* NOTEWIDTH);
+                            text.setY((125 - newPiece.notes.get(i).getCNote()) * NOTEHEIGHT);
+
+
+                            newGroup.getChildren().addAll(viewNewNote,text);
                             }
                     }
                     root.getChildren().add(newGroup);
+
+
+                    ///create Algo
+
+
+                    Group chordGroupe = new Group();
+                    for (int i = 0; i < (((piece.getPieceLenght16()/32))*32); i++) {
+
+                            Text text = new Text();
+                            text.setText(chordFinder.getChordsResults().get(i));
+                            text.setX(i * NOTEWIDTH);
+                            text.setY(55);
+
+                        chordGroupe.getChildren().addAll(text);
+                        }
+                    root.getChildren().add(chordGroupe);
+
+
 
 
 
                     for (int i = 0; i < piece.getPieceLenght16(); i++) {
 
                         //Make visual for CHORD DATA
-                        ViewChord viewOldChord = new ViewChord(i * ViewNote.NOTEWIDTH,0,piece.chords);
+                        ViewChord viewOldChord = new ViewChord(i * NOTEWIDTH,0,piece.chords);
+
+
                         viewOldChord.setOnMouseDragEntered((event1 -> {
                             viewOldChord.setFill(color);
-                            piece.chords.get((int) (viewOldChord.getX()/ ViewNote.NOTEWIDTH)).setChord(chord);
+                            piece.chords.get((int) (viewOldChord.getX()/ NOTEWIDTH)).setChord(chord);
                         }));
 
 
 
                         //Make visual for CHORD DATA
-                        ViewChord viewNewChord = new ViewChord(i * ViewNote.NOTEWIDTH,1,newPiece.chords);
+                        ViewChord viewNewChord = new ViewChord(i * NOTEWIDTH,1,newPiece.chords);
                         viewNewChord.setOnMouseDragEntered((event1 -> {
                             viewNewChord.setFill(color);
-                            newPiece.chords.get((int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH)).setChord(chord);
+                            newPiece.chords.get((int) (viewNewChord.getX()/ NOTEWIDTH)).setChord(chord);
 
 
-                                int pulse16 =(int) (viewNewChord.getX()/ ViewNote.NOTEWIDTH);
+                                int pulse16 =(int) (viewNewChord.getX()/ NOTEWIDTH);
 
                                 Piece.Chord origChord = piece.chords.get(pulse16);
                                 origChord.getChord();
@@ -329,7 +372,7 @@ public class Main extends Application {
                             if(piece.chords.get(pulse16).getChord() != EChord.nothing && piece.pulses.containsKey(pulse16)){
 
                                 for (Piece.Note note : newPiece.pulses.get(pulse16).getNotes()) {
-                                    note.setNote(AlgoNote.changenote(origChord.getChord(),newChord.getChord(),note.getCNote()));
+                                    note.setChordAjuste(algoNote.changenote(origChord.getChord(),newChord.getChord(),note.getCNote()));
                                 }
 
                             }
@@ -354,7 +397,7 @@ public class Main extends Application {
         root = new Pane();
         borderPane.setCenter(root);
 
-        rect2 =new Rectangle(0,0,5, ViewNote.BEATHEIGHT + (NBNOTE  * ViewNote.NOTEHEIGHT));
+        rect2 =new Rectangle(0,0,5, ViewNote.BEATHEIGHT + (NBNOTE  * NOTEHEIGHT));
         rect2.setFill(Color.RED);
         root.getChildren().add(rect2);
 

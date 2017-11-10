@@ -3,6 +3,7 @@ package com.Common;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 
 public class  ViewNote extends Rectangle {
@@ -11,12 +12,11 @@ public class  ViewNote extends Rectangle {
     public static final int NOTEHEIGHT = 20;
     public static final int BEATHEIGHT = 30;
 
-    public ViewButton btnChord;
 
 
     public ViewNote(int pulse, int cnote, int lenght, int height, Color color, double opacity ){
 
-        super(pulse * NOTEWIDTH, (77 - cnote) * NOTEHEIGHT, NOTEWIDTH * lenght, height+NOTEHEIGHT);
+        super(pulse * NOTEWIDTH, (125 - cnote) * NOTEHEIGHT, NOTEWIDTH * lenght, height+NOTEHEIGHT);
 
         setFill(color);
         setStroke(Color.BLACK);
@@ -25,13 +25,8 @@ public class  ViewNote extends Rectangle {
         setOpacity(opacity);
 
 
-
-
     }
 
-    public void setBtnChord(ViewButton btnChord) {
-        this.btnChord = btnChord;
-    }
 
 }
 

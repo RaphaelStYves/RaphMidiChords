@@ -1,10 +1,5 @@
 package com.Common;
 
-import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +12,13 @@ public class Piece implements Serializable{
     private int resolution;
     private float divisionType;
     private int cTranspose;
-    private long pieceLenght;
+    private int pieceLenght16;
     private float bpm = 0;
+    private String name = "noName";
     public List<Note> notes = new ArrayList<>();
     public List<Chord> chords = new ArrayList<>();
     public HashMap<Integer,Pulse> pulses = new HashMap<>();
+    public HashMap<Integer,Tracknumber> trackNumbers = new HashMap<>();
 
 
     private static final int NOTE_ON = 0x90;
@@ -30,6 +27,7 @@ public class Piece implements Serializable{
 
     public Piece(File file) throws IOException, InvalidMidiDataException, MidiUnavailableException {
 
+        this.name = fileNameWithoutExtension(file);
 
         Sequence sequence = MidiSystem.getSequence(file);
         Sequencer seqr = MidiSystem.getSequencer();
@@ -67,6 +65,7 @@ public class Piece implements Serializable{
                         note.setPulse(event.getTick());
                         note.setOctave((sm.getData1() / 12) - 1);
 
+
                         note.setNotename(NOTE_NAMES[sm.getData1() % 12]);
 
                         notes.add(note);
@@ -85,6 +84,20 @@ public class Piece implements Serializable{
                             //pulses.put(note.getPulse16(), pulse);
                         }
 
+
+
+                        if ( !trackNumbers.containsKey(note.getTracknumber())){
+
+                            Tracknumber tracknumber = new Tracknumber();
+                            tracknumber.addNote(note);
+                            trackNumbers.put(note.getTracknumber(), tracknumber);
+
+                        }else {
+
+                            Tracknumber tracknumber = trackNumbers.get(note.getTracknumber());
+                            tracknumber.addNote(note);
+
+                        }
 
 
                     } else if (sm.getCommand() == NOTE_OFF) {
@@ -107,12 +120,25 @@ public class Piece implements Serializable{
 
 
         calculateTranspose();
-        findPieceLenght();
+        findPieceLenght16();
+
         calculateLenght();
         ChangeToFalse();
         initChords();
 
+
     }
+    public String fileNameWithoutExtension(File file) {
+        String name = file.getName();
+        int pos = name.lastIndexOf('.');
+        if (pos > 0 && pos < (name.length() - 1)) {
+            // there is a '.' and it's not the first, or last character.
+            return name.substring(0,  pos);
+        }
+        return name;
+    }
+
+
 
     private void ChangeToFalse() {
         for (int i = 0; i < notes.size(); i++) {
@@ -163,34 +189,36 @@ public class Piece implements Serializable{
         int noteId;
         Map<Integer, Integer> mapTrans = new HashMap<>();
         //calcul chaque note pour chaque offset
-        for (int offSetDT = 0; offSetDT < 11; offSetDT++) {
+        for (int offSetDT = 0; offSetDT < 12; offSetDT++) {
             int temp = 0;
             for (int i = 0; i < notes.size(); i++) {
                 if (notes.get(i).getChannel() != 9) {
                     noteId = (notes.get(i).getNote() + offSetDT) % 12;
-                    if (noteId != 1 || noteId != 3 || noteId != 6 || noteId != 8 || noteId != 10) {
-                        temp = +1;
+                    if (noteId == 1 || noteId == 3 || noteId == 6 || noteId == 8 || noteId == 10) {
+                        temp += 1;
                     }
                 }
             }
             mapTrans.put(offSetDT, temp);
         }
         //Finding Key associated with max Value in a Java Map
-        cTranspose = Collections.max(mapTrans.entrySet(), Map.Entry.comparingByValue()).getKey();
+        cTranspose = Collections.min(mapTrans.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 
-    private void findPieceLenght() {
+    private void findPieceLenght16() {
 
-        long temp = 0;
+        int temp = 0;
 
         for (Note note : notes) {
-            if (note.getPulse() + note.getLenght() > temp) {
-                temp = note.getPulse() + note.getLenght();
+            if (note.getPulse16() + note.getLenght16() > temp) {
+                temp = note.getPulse16() + note.getLenght16();
             }
         }
 
-        pieceLenght = temp;
+        pieceLenght16 = temp;
+
     }
+
 
     private void initChords() {
 
@@ -214,13 +242,20 @@ public class Piece implements Serializable{
         return bpm;
     }
 
-    public long getPieceLenght16() {
-        return  pieceLenght / (resolution/4);
+    public int getPieceLenght16() {
+        return  pieceLenght16;
     }
 
     public float getDivisionType() {
         return divisionType;
     }
+
+    public String getName() {
+        return name;
+    }
+
+
+
 
     class Chord implements Serializable{
 
@@ -236,7 +271,9 @@ public class Piece implements Serializable{
     }
 
 
-    class Note implements Serializable{
+
+
+    public class Note implements Serializable{
 
         private int note;
         private int CNote;
@@ -251,7 +288,12 @@ public class Piece implements Serializable{
         private String notename;
         private int instrument;
         private int index;
+        private int chordAjuste;
 
+
+        public void setChordAjuste(int chordAjuste) {
+            this.chordAjuste = chordAjuste;
+        }
 
 
         //Property
@@ -271,11 +313,11 @@ public class Piece implements Serializable{
         }
 
         public int getCNote() {
-            return note +cTranspose;
+            return note + cTranspose + chordAjuste;
         }
 
 
-        public long getLenght() {
+        private long getLenght() {
             return lenght;
         }
 
@@ -295,7 +337,7 @@ public class Piece implements Serializable{
             this.velocity = velocity;
         }
 
-        int getChannel() {
+        public int getChannel() {
             return channel;
         }
 
@@ -351,6 +393,12 @@ public class Piece implements Serializable{
         public void setIndex(int index) {
             this.index = index;
         }
+
+
+        public int getTracknumber() {
+            return tracknumber;
+        }
+
 
     }
 

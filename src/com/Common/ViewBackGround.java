@@ -9,21 +9,18 @@ import javafx.scene.text.Text;
 
 public class ViewBackGround extends Group {
 
-    Piece piece;
-
-
     public static final int NBNOTE =125;
     private int TXTAJUTY = 15;
     private int TXTAJUTX = 10;
-    //old 78
+    private int pieceLenght16;
 
-    ViewBackGround(Piece piece){
+    ViewBackGround(int pieceLenght16){
 
-        this.piece =piece;
+        this.pieceLenght16 = pieceLenght16;
 
-        for (int i = 0; i <= NBNOTE; i++) {
+     for (int i = 0; i <= NBNOTE; i++) {
 
-            Rectangle rect1 = new Rectangle(0 , (NBNOTE - i) * ViewNote.NOTEHEIGHT, ViewNote.NOTEWIDTH * piece.getPieceLenght16(), ViewNote.NOTEHEIGHT);
+            Rectangle rect1 = new Rectangle(0 , (NBNOTE - i) * ViewNote.NOTEHEIGHT, ViewNote.NOTEWIDTH * pieceLenght16, ViewNote.NOTEHEIGHT);
             Text text = new Text(TXTAJUTX,(NBNOTE - i) * ViewNote.NOTEHEIGHT + TXTAJUTY, null);
 
 
@@ -81,7 +78,7 @@ public class ViewBackGround extends Group {
 
     private void createMesure() {
 
-        for (int i = 0; i < piece.getPieceLenght16(); i++) {
+        for (int i = 0; i < pieceLenght16; i++) {
 
             if (i%1 ==0){
 

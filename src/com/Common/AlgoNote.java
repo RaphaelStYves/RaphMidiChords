@@ -5,11 +5,12 @@ import java.util.*;
 
 public final class AlgoNote {
 
-    public static int changenote(EChord origChord, EChord newChord, int note) {
+    public int changenote(EChord origChord, EChord newChord, int note) {
 
         Map<EChord, List<Integer>> mapChord = compliteAllForceChords();
         int newNote = 0;
         int degre = 0;
+        int ajuste = 0;
 
 
         for (Map.Entry<EChord, List<Integer>> entry : mapChord.entrySet()) {
@@ -30,14 +31,14 @@ public final class AlgoNote {
                     if (degre == entry.getValue().get(j)) {
 
                         int modNewNote =  j;
-                        int transpose;
 
-                        transpose = modNewNote - (note % 12);
 
-                        if (transpose < 6){
-                            newNote = note + transpose;
+                        ajuste = modNewNote - (note % 12);
+
+                        if (ajuste < 6){
+                            newNote = note + ajuste;
                         }else {
-                            newNote = note - (12- transpose);
+                            newNote = note - (12- ajuste);
                         }
 
 
@@ -46,7 +47,7 @@ public final class AlgoNote {
             }
         }
 
-        return newNote;
+        return ajuste;
     }
 
     private static Map<EChord, List<Integer>> compliteAllForceChords() {
